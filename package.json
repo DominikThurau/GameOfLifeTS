@@ -1,0 +1,22 @@
+{
+  "name": "gameoflifets",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DominikThurau/GameOfLifeTS.git"
+  },
+  "author": "Dominik Thurau",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DominikThurau/GameOfLifeTS/issues"
+  },
+  "homepage": "https://github.com/DominikThurau/GameOfLifeTS#readme",
+  "dependencies": {
+    "@material-ui/core": "^4.11.3"
+  }
+}

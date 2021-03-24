@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+    />
+    <link
+      rel="stylesheet"
+      href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="build/script.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+      <div class="wrapper">
+        <h1>Game of life</h1>
+        <p>Einleitung, Anleitung und Beschreibung</p>
+        <div class="config-bar">
+          <div class="input-field">
+            <p class="input-title">Spalten:</p>
+            <input class="slider" type="range" min="5" max="50" id="columSlider" value="5"/>
+            <p id="columValue"></p>
+          </div>
+          <div class="input-field">
+            <p class="input-title">Reihen:</p>
+            <input class="slider" type="range" min="5" max="50" id="rowSlider" value="5"/>
+            <p id="rowValue"></p>
+          </div>
+          <button id="start-button">Start</button>
+        </div>
+        <div id="gamefield">
+
+        </div>
+      </div>
+    
+  </body>
+</html>
