@@ -9,7 +9,7 @@
 //Defining Variables
 let mouseDown: boolean = false;
 let isPencil: boolean = true;
-let brush: string = "default";
+let brush: string = "pulsarBrush";
 let play: boolean = false;
 let speed: number;
 
@@ -137,6 +137,11 @@ function activateCell(xPos:string, yPos:string, hover?:boolean){
            //statements; 
            break; 
         } 
+        case "pulsarBrush": {
+                       //statements; 
+           !hover?pulsarBrush(xPos, yPos):pulsarBrush(xPos, yPos, true);
+           break; 
+        }
         default: { 
             !hover?defaulBrush(xPos, yPos):defaulBrush(xPos, yPos, true);
            break; 
@@ -191,6 +196,82 @@ function brushOne(xPos:string, yPos:string, hover?:boolean){
         cells.forEach(cell => cell.classList.toggle("mouse-over"));
     } else{
         cells.forEach(cell => isPencil?cell.classList.add("alive"):cell.classList.remove("alive"))
+    }
+}
+
+function pulsarBrush(xPos:string, yPos:string, hover?:boolean){
+    //Which cells do you want to change?
+    let cells = [
+        {x:-3, y:-7},
+        {x:-3, y:-6},
+        {x:-3, y:-5},
+        {x:-2, y:-5},
+        {x:-2, y:-3},
+        {x:-1, y:-3},
+        {x:-1, y:-2},
+
+        {x:-7, y:-3},
+        {x:-6, y:-3},
+        {x:-5, y:-3},
+        {x:-5, y:-2},
+        {x:-3, y:-2},
+        {x:-3, y:-1},
+        {x:-2, y:-1},
+
+        {x:3, y:-7},
+        {x:3, y:-6},
+        {x:3, y:-5},
+        {x:2, y:-5},
+        {x:2, y:-3},
+        {x:1, y:-3},
+        {x:1, y:-2},
+
+        {x:7, y:-3},
+        {x:6, y:-3},
+        {x:5, y:-3},
+        {x:5, y:-2},
+        {x:3, y:-2},
+        {x:3, y:-1},
+        {x:2, y:-1},
+
+        {x:3, y:7},
+        {x:3, y:6},
+        {x:3, y:5},
+        {x:2, y:5},
+        {x:2, y:3},
+        {x:1, y:3},
+        {x:1, y:2},
+
+        {x:7, y:3},
+        {x:6, y:3},
+        {x:5, y:3},
+        {x:5, y:2},
+        {x:3, y:2},
+        {x:3, y:1},
+        {x:2, y:1},
+
+        {x:-3, y:7},
+        {x:-3, y:6},
+        {x:-3, y:5},
+        {x:-2, y:5},
+        {x:-2, y:3},
+        {x:-1, y:3},
+        {x:-1, y:2},
+
+        {x:-7, y:3},
+        {x:-6, y:3},
+        {x:-5, y:3},
+        {x:-5, y:2},
+        {x:-3, y:2},
+        {x:-3, y:1},
+        {x:-2, y:1},
+    ];
+
+    //If Hovermode toggle hover effect
+    if(hover){
+        cells.forEach(cell => document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)?document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)?.classList.toggle("mouse-over"):null);
+    } else{
+        cells.forEach(cell => isPencil?document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)?.classList.add("alive"):document.getElementById(`${cell.x + "_" + cell.y}`)?.classList.remove("alive"))
     }
 }
 

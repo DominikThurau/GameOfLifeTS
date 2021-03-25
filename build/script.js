@@ -9,7 +9,7 @@
 //Defining Variables
 let mouseDown = false;
 let isPencil = true;
-let brush = "default";
+let brush = "pulsarBrush";
 let play = false;
 let speed;
 let cellTable = new Map();
@@ -111,6 +111,11 @@ function activateCell(xPos, yPos, hover) {
             //statements; 
             break;
         }
+        case "pulsarBrush": {
+            //statements; 
+            !hover ? pulsarBrush(xPos, yPos) : pulsarBrush(xPos, yPos, true);
+            break;
+        }
         default: {
             !hover ? defaulBrush(xPos, yPos) : defaulBrush(xPos, yPos, true);
             break;
@@ -161,6 +166,74 @@ function brushOne(xPos, yPos, hover) {
     }
     else {
         cells.forEach(cell => isPencil ? cell.classList.add("alive") : cell.classList.remove("alive"));
+    }
+}
+function pulsarBrush(xPos, yPos, hover) {
+    //Which cells do you want to change?
+    let cells = [
+        { x: -3, y: -7 },
+        { x: -3, y: -6 },
+        { x: -3, y: -5 },
+        { x: -2, y: -5 },
+        { x: -2, y: -3 },
+        { x: -1, y: -3 },
+        { x: -1, y: -2 },
+        { x: -7, y: -3 },
+        { x: -6, y: -3 },
+        { x: -5, y: -3 },
+        { x: -5, y: -2 },
+        { x: -3, y: -2 },
+        { x: -3, y: -1 },
+        { x: -2, y: -1 },
+        { x: 3, y: -7 },
+        { x: 3, y: -6 },
+        { x: 3, y: -5 },
+        { x: 2, y: -5 },
+        { x: 2, y: -3 },
+        { x: 1, y: -3 },
+        { x: 1, y: -2 },
+        { x: 7, y: -3 },
+        { x: 6, y: -3 },
+        { x: 5, y: -3 },
+        { x: 5, y: -2 },
+        { x: 3, y: -2 },
+        { x: 3, y: -1 },
+        { x: 2, y: -1 },
+        { x: 3, y: 7 },
+        { x: 3, y: 6 },
+        { x: 3, y: 5 },
+        { x: 2, y: 5 },
+        { x: 2, y: 3 },
+        { x: 1, y: 3 },
+        { x: 1, y: 2 },
+        { x: 7, y: 3 },
+        { x: 6, y: 3 },
+        { x: 5, y: 3 },
+        { x: 5, y: 2 },
+        { x: 3, y: 2 },
+        { x: 3, y: 1 },
+        { x: 2, y: 1 },
+        { x: -3, y: 7 },
+        { x: -3, y: 6 },
+        { x: -3, y: 5 },
+        { x: -2, y: 5 },
+        { x: -2, y: 3 },
+        { x: -1, y: 3 },
+        { x: -1, y: 2 },
+        { x: -7, y: 3 },
+        { x: -6, y: 3 },
+        { x: -5, y: 3 },
+        { x: -5, y: 2 },
+        { x: -3, y: 2 },
+        { x: -3, y: 1 },
+        { x: -2, y: 1 },
+    ];
+    //If Hovermode toggle hover effect
+    if (hover) {
+        cells.forEach(cell => { var _a; return document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`) ? (_a = document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)) === null || _a === void 0 ? void 0 : _a.classList.toggle("mouse-over") : null; });
+    }
+    else {
+        cells.forEach(cell => { var _a, _b; return isPencil ? (_a = document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)) === null || _a === void 0 ? void 0 : _a.classList.add("alive") : (_b = document.getElementById(`${cell.x + "_" + cell.y}`)) === null || _b === void 0 ? void 0 : _b.classList.remove("alive"); });
     }
 }
 //Abfrage der Nachbarn
