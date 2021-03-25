@@ -5,6 +5,8 @@ interface Cell {
 }
 
 let mouseDown: boolean = false;
+let isPencil: boolean = true;
+
 document.body.onmousedown = function() { 
     mouseDown = true;
   }
@@ -14,6 +16,19 @@ document.body.onmousedown = function() {
 
 const startButton = document.getElementById("start-button");
 const field = document.getElementById("gamefield");
+
+const drawModeButton = document.getElementById("draw-mode-button");
+
+function toggleDrawMode(){
+    isPencil=!isPencil;
+
+    if(isPencil){
+        drawModeButton?drawModeButton.innerHTML = "Pencil":null;
+    } else {
+        drawModeButton?drawModeButton.innerHTML = "Eraser":null;
+    }
+    
+}
 
 //Getting Slider and View of Colum
 const columSlider = document.getElementById("columSlider") as HTMLInputElement;
@@ -45,16 +60,13 @@ columSlider.addEventListener("input", displayColumnValue);
 rowSlider.addEventListener("input", displayRowValue);
 
 var objekte = ["sas", "sass", "ff"];
-columSlider?console.log(columSlider.value):null;
 
-objekte.forEach((e) => {console.log(e)});
 
 
 
 let a : Cell = {id: "1", x: 0, y: 0};
 
 function generateField(){
-    console.log("Generated Field");
     
     //clear the field
     field?field.innerHTML = "":null;
@@ -64,13 +76,12 @@ function generateField(){
 
 
         for(let xPos = 0;xPos< parseInt(columSlider.value); xPos++){
-            console.log("Added cell");
-            cells += `<div class="cell dead" id="${"x" + xPos +"/y" + rowCount}" data-x="${xPos}" data-y="${rowCount}" dead" onmouseover="addSelection(this.dataset.x, this.dataset.y)" onmouseout="removeSelection(this.dataset.x, this.dataset.y)"></div>`;
+            cells += `<div class="cell dead" draggable="false" id="${"x" + xPos +"/y" + rowCount}" data-x="${xPos}" data-y="${rowCount}" dead" onmouseover="addSelection(this.dataset.x, this.dataset.y)" onmouseout="removeSelection(this.dataset.x, this.dataset.y)" onclick="activateCell(this.dataset.x, this.dataset.y)"></div>`;
         }
 
         //Create one Row
         let currentRow = `
-        <div class="row">
+        <div class="row" draggable="false">
         ${cells}
         </div>`;
         field?field.innerHTML += `
@@ -79,18 +90,15 @@ function generateField(){
 }
 
 function addSelection(xPos:string, yPos:string){
-    console.log("Mouse is over!");
     let calcId = `x${xPos}/y${yPos}`;
     const selectedCell = document.getElementById(`x${xPos}/y${yPos}`);
     selectedCell?.classList.add("mouseOver");
     if(mouseDown){
-        console.log("Draw");
         activateCell(xPos, yPos);
     }
 }
 
 function removeSelection(xPos:string, yPos:string){
-    console.log("Mouse is over!");
     let calcId = `x${xPos}/y${yPos}`;
     const selectedCell = document.getElementById(`x${xPos}/y${yPos}`);
     selectedCell?.classList.remove("mouseOver");
@@ -98,11 +106,7 @@ function removeSelection(xPos:string, yPos:string){
 
 function activateCell(xPos:string, yPos:string){
     let calcId = `x${xPos}/y${yPos}`;
-    console.log(calcId);
     const clickedCell = document.getElementById(`x${xPos}/y${yPos}`);
     const leftCell = document.getElementById(`x${(parseInt(xPos)-1).toString()}/y${(parseInt(yPos)-1).toString()}`);
-    console.log(clickedCell);
-    console.log(leftCell);
-    clickedCell?.classList.toggle("alive");
-    leftCell?.classList.toggle("alive");
+    isPencil?(clickedCell?.classList.add("alive")):(clickedCell?.classList.remove("alive"))
 }
