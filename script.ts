@@ -9,7 +9,11 @@
 //Defining Variables
 let mouseDown: boolean = false;
 let isPencil: boolean = true;
-let brush: string = "deafult";
+let brush: string = "default";
+let play: boolean = false;
+let speed: number;
+
+let cellTable = new Map();
 
 //Getting Gamefield
 const field = document.getElementById("gamefield");
@@ -26,6 +30,9 @@ const columValue = document.getElementById("columValue");
 const rowSlider = document.getElementById("rowSlider") as HTMLInputElement;
 const rowValue = document.getElementById("rowValue");
 
+//Getting Slider and View of Row
+const speedSlider = document.getElementById("speedSlider") as HTMLInputElement;
+const speedValue = document.getElementById("speedValue");
 
 //Toggling if mouse is down
 document.body.onmousedown = function() { 
@@ -48,6 +55,15 @@ function toggleDrawMode(){
     
 }
 
+//Toggling between start and pause
+function startAndStop(){
+    play=!play;
+    if(play){
+        playSimulation();
+}
+    
+}
+
 //Render SliderValues
 function displayColumnValue(){
     let newValue = columSlider.value;
@@ -59,14 +75,22 @@ function displayRowValue(){
     rowValue?rowValue.innerHTML = newValue:null;
     generateField();
 }
+function displaySpeedValue(){
+    speed = parseInt(speedSlider.value);
+    speedValue?speedValue.innerHTML = speed.toString():null;
+
+}
+
 
 //Add Eventlistener for  change of Inputvalues
 columSlider.addEventListener("input", displayColumnValue);
 rowSlider.addEventListener("input", displayRowValue);
+speedSlider.addEventListener("input", displaySpeedValue);
 
 //Init Game
 displayColumnValue();
 displayRowValue();
+displaySpeedValue();
 
 //Render gamefield
 function generateField(){
@@ -74,12 +98,13 @@ function generateField(){
     //clear the field
     field?field.innerHTML = "":null;
 
-    for(let rowCount = 0; rowCount < parseInt(rowSlider.value); rowCount++ ){
+    for(let yPos = 0; yPos < parseInt(rowSlider.value); yPos++ ){
         //Cell "List"
         let cells:string = "";
 
         for(let xPos = 0;xPos< parseInt(columSlider.value); xPos++){
-            cells += `<div class="cell dead" draggable="false" id="${"x" + xPos +"/y" + rowCount}" data-x="${xPos}" data-y="${rowCount}" dead" onmouseover="addSelection(this.dataset.x, this.dataset.y)" onmouseout="removeSelection(this.dataset.x, this.dataset.y)" onclick="activateCell(this.dataset.x, this.dataset.y)"></div>`;
+            
+            cells += `<div class="cell dead" draggable="false" id="${xPos +"_" + yPos}" data-x="${xPos}" data-y="${yPos}" data-neighbours="0" onmouseover="addSelection(this.dataset.x, this.dataset.y)" onmouseout="removeSelection(this.dataset.x, this.dataset.y)" onclick="activateCell(this.dataset.x, this.dataset.y)"></div>`;
         }
 
         //Create one Row
@@ -90,11 +115,17 @@ function generateField(){
         field?field.innerHTML += `
         ${currentRow}`:null;
     }
+
+    for(let yPos = 0; yPos < parseInt(rowSlider.value); yPos++ ){
+        
+        for(let xPos = 0;xPos< parseInt(columSlider.value); xPos++){
+            cellTable.set(`${xPos +"_" + yPos}`, document.getElementById(xPos + "_" + yPos) );
+        }
+    }
 }
 
 //Bring Cells back to Live or kill them
 function activateCell(xPos:string, yPos:string, hover?:boolean){
-    let calcId = `x${xPos}/y${yPos}`;
     //const clickedCell = document.getElementById(`x${xPos}/y${yPos}`);
     switch(brush) { 
         case "one": { 
@@ -116,8 +147,7 @@ function activateCell(xPos:string, yPos:string, hover?:boolean){
 //Render Selection
 function addSelection(xPos:string, yPos:string){
     //Getting clicked Position
-    let calcId = `x${xPos}/y${yPos}`;
-    const selectedCell = document.getElementById(`x${xPos}/y${yPos}`);
+    const selectedCell = document.getElementById(`${xPos +"_" + yPos}`);
     activateCell(xPos, yPos, true);
 
     //Draw if mouse is down
@@ -127,8 +157,7 @@ function addSelection(xPos:string, yPos:string){
 }
 //Remove Selection
 function removeSelection(xPos:string, yPos:string){
-    let calcId = `x${xPos}/y${yPos}`;
-    const selectedCell = document.getElementById(`x${xPos}/y${yPos}`);
+    const selectedCell = document.getElementById(`${xPos +"_" + yPos}`);
     activateCell(xPos, yPos, true);
 }
 
@@ -136,7 +165,7 @@ function removeSelection(xPos:string, yPos:string){
 function defaulBrush(xPos:string, yPos:string, hover?:boolean){
     //Which cells do you want to change?
     let cells: HTMLElement[] = [
-        document.getElementById(`x${xPos}/y${yPos}`) as HTMLElement,
+        document.getElementById(`${xPos +"_" + yPos}`) as HTMLElement,
     ];
 
     //If Hovermode toggle hover effect
@@ -150,11 +179,11 @@ function defaulBrush(xPos:string, yPos:string, hover?:boolean){
 function brushOne(xPos:string, yPos:string, hover?:boolean){
     //Which cells do you want to change?
     let cells: HTMLElement[] = [
-        document.getElementById(`x${xPos}/y${yPos}`) as HTMLElement,
-        document.getElementById(`x${(parseInt(xPos)).toString()}/y${(parseInt(yPos) -1).toString()}`) as HTMLElement,
-        document.getElementById(`x${(parseInt(xPos)).toString()}/y${(parseInt(yPos)  + 1).toString()}`) as HTMLElement,
-        document.getElementById(`x${(parseInt(xPos) - 1).toString()}/y${(parseInt(yPos)).toString()}`) as HTMLElement,
-        document.getElementById(`x${(parseInt(xPos) + 1).toString()}/y${(parseInt(yPos)).toString()}`) as HTMLElement,
+        document.getElementById(`${xPos +"_" + yPos}`) as HTMLElement,
+        document.getElementById(`${(parseInt(xPos)).toString()}_${(parseInt(yPos) -1).toString()}`) as HTMLElement,
+        document.getElementById(`${(parseInt(xPos)).toString()}_${(parseInt(yPos)  + 1).toString()}`) as HTMLElement,
+        document.getElementById(`${(parseInt(xPos) - 1).toString()}_${(parseInt(yPos)).toString()}`) as HTMLElement,
+        document.getElementById(`${(parseInt(xPos) + 1).toString()}_${(parseInt(yPos)).toString()}`) as HTMLElement,
     ];
 
     //If Hovermode toggle hover effect
@@ -165,3 +194,42 @@ function brushOne(xPos:string, yPos:string, hover?:boolean){
     }
 }
 
+//Abfrage der Nachbarn
+function scanForNeighbours(){
+    let neighbours;
+    cellTable.forEach(element=> {
+        neighbours = 0;
+        //console.log(cellTable.get(`${(parseInt(element.dataset.x)+1).toString()}_${(parseInt(element.dataset.y)+1).toString()}`));
+            //console.log(`${(parseInt(element.dataset.x)+1).toString()}_${(parseInt(element.dataset.y)+1).toString()}`);
+            cellTable.get(`${(parseInt(element.dataset.x)-1).toString()}_${(parseInt(element.dataset.y)-1).toString()}`)&&cellTable.get(`${(parseInt(element.dataset.x)-1).toString()}_${(parseInt(element.dataset.y)-1).toString()}`).classList.contains("alive")&&neighbours++;
+            cellTable.get(`${(parseInt(element.dataset.x)).toString()}_${(parseInt(element.dataset.y)-1).toString()}`)&&cellTable.get(`${(parseInt(element.dataset.x)).toString()}_${(parseInt(element.dataset.y)-1).toString()}`).classList.contains("alive")&&neighbours++;
+            cellTable.get(`${(parseInt(element.dataset.x)+1).toString()}_${(parseInt(element.dataset.y)-1).toString()}`)&&cellTable.get(`${(parseInt(element.dataset.x)+1).toString()}_${(parseInt(element.dataset.y)-1).toString()}`).classList.contains("alive")&&neighbours++;
+            cellTable.get(`${(parseInt(element.dataset.x)-1).toString()}_${(parseInt(element.dataset.y)).toString()}`)&&cellTable.get(`${(parseInt(element.dataset.x)-1).toString()}_${(parseInt(element.dataset.y)).toString()}`).classList.contains("alive")&&neighbours++;
+            cellTable.get(`${(parseInt(element.dataset.x)+1).toString()}_${(parseInt(element.dataset.y)).toString()}`)&&cellTable.get(`${(parseInt(element.dataset.x)+1).toString()}_${(parseInt(element.dataset.y)).toString()}`).classList.contains("alive")&&neighbours++;
+            cellTable.get(`${(parseInt(element.dataset.x)-1).toString()}_${(parseInt(element.dataset.y)+1).toString()}`)&&cellTable.get(`${(parseInt(element.dataset.x)-1).toString()}_${(parseInt(element.dataset.y)+1).toString()}`).classList.contains("alive")&&neighbours++;
+            cellTable.get(`${(parseInt(element.dataset.x)).toString()}_${(parseInt(element.dataset.y)+1).toString()}`)&&cellTable.get(`${(parseInt(element.dataset.x)).toString()}_${(parseInt(element.dataset.y)+1).toString()}`).classList.contains("alive")&&neighbours++;
+            cellTable.get(`${(parseInt(element.dataset.x)+1).toString()}_${(parseInt(element.dataset.y)+1).toString()}`)&&cellTable.get(`${(parseInt(element.dataset.x)+1).toString()}_${(parseInt(element.dataset.y)+1).toString()}`).classList.contains("alive")&&neighbours++;
+            //console.log(neighbours.toString());
+            element.dataset.neighbours = neighbours.toString();
+    })
+    changeStates();
+}
+
+function changeStates(){
+    //console.log(parseInt(element.dataset.neighbours));
+    cellTable.forEach(element=> {
+       ((!element.classList.contains("alive")) && parseInt(element.dataset.neighbours)===3)&&   element.classList.add("alive");
+       ((element.classList.contains("alive")) && parseInt(element.dataset.neighbours)<2)&&   element.classList.remove("alive");
+       //((element.classList.contains("alive")) && (parseInt(element.dataset.neighbours)===2));
+       //((element.classList.contains("alive")) && (parseInt(element.dataset.neighbours)===3));
+       ((element.classList.contains("alive")) && parseInt(element.dataset.neighbours)>3)&&   element.classList.remove("alive");
+    });
+}
+function playSimulation(){
+    if(play){
+        scanForNeighbours();
+        setTimeout(() => {  playSimulation(); }, speed);
+    }
+    
+    
+}

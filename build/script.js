@@ -7,20 +7,26 @@
     let a : Cell = {id: "1", x: 0, y: 0};
 }*/
 //Defining Variables
-var mouseDown = false;
-var isPencil = true;
-var brush = "deafult";
+let mouseDown = false;
+let isPencil = true;
+let brush = "default";
+let play = false;
+let speed;
+let cellTable = new Map();
 //Getting Gamefield
-var field = document.getElementById("gamefield");
+const field = document.getElementById("gamefield");
 //Getting Tags
-var startButton = document.getElementById("start-button"); //Getting Buttons
-var drawModeButton = document.getElementById("draw-mode-button"); //Getting Pencil Button
+const startButton = document.getElementById("start-button"); //Getting Buttons
+const drawModeButton = document.getElementById("draw-mode-button"); //Getting Pencil Button
 //Getting Slider and View of Colum
-var columSlider = document.getElementById("columSlider");
-var columValue = document.getElementById("columValue");
+const columSlider = document.getElementById("columSlider");
+const columValue = document.getElementById("columValue");
 //Getting Slider and View of Row
-var rowSlider = document.getElementById("rowSlider");
-var rowValue = document.getElementById("rowValue");
+const rowSlider = document.getElementById("rowSlider");
+const rowValue = document.getElementById("rowValue");
+//Getting Slider and View of Row
+const speedSlider = document.getElementById("speedSlider");
+const speedValue = document.getElementById("speedValue");
 //Toggling if mouse is down
 document.body.onmousedown = function () {
     mouseDown = true;
@@ -38,41 +44,62 @@ function toggleDrawMode() {
         drawModeButton ? drawModeButton.innerHTML = "Eraser" : null;
     }
 }
+//Toggling between start and pause
+function startAndStop() {
+    play = !play;
+    if (play) {
+        playSimulation();
+    }
+}
 //Render SliderValues
 function displayColumnValue() {
-    var newValue = columSlider.value;
+    let newValue = columSlider.value;
     columValue ? columValue.innerHTML = newValue : null;
     generateField();
 }
 function displayRowValue() {
-    var newValue = rowSlider.value;
+    let newValue = rowSlider.value;
     rowValue ? rowValue.innerHTML = newValue : null;
     generateField();
+}
+function displaySpeedValue() {
+    speed = parseInt(speedSlider.value);
+    speedValue ? speedValue.innerHTML = speed.toString() : null;
 }
 //Add Eventlistener for  change of Inputvalues
 columSlider.addEventListener("input", displayColumnValue);
 rowSlider.addEventListener("input", displayRowValue);
+speedSlider.addEventListener("input", displaySpeedValue);
 //Init Game
 displayColumnValue();
 displayRowValue();
+displaySpeedValue();
 //Render gamefield
 function generateField() {
     //clear the field
     field ? field.innerHTML = "" : null;
-    for (var rowCount = 0; rowCount < parseInt(rowSlider.value); rowCount++) {
+    for (let yPos = 0; yPos < parseInt(rowSlider.value); yPos++) {
         //Cell "List"
-        var cells = "";
-        for (var xPos = 0; xPos < parseInt(columSlider.value); xPos++) {
-            cells += "<div class=\"cell dead\" draggable=\"false\" id=\"" + ("x" + xPos + "/y" + rowCount) + "\" data-x=\"" + xPos + "\" data-y=\"" + rowCount + "\" dead\" onmouseover=\"addSelection(this.dataset.x, this.dataset.y)\" onmouseout=\"removeSelection(this.dataset.x, this.dataset.y)\" onclick=\"activateCell(this.dataset.x, this.dataset.y)\"></div>";
+        let cells = "";
+        for (let xPos = 0; xPos < parseInt(columSlider.value); xPos++) {
+            cells += `<div class="cell dead" draggable="false" id="${xPos + "_" + yPos}" data-x="${xPos}" data-y="${yPos}" data-neighbours="0" onmouseover="addSelection(this.dataset.x, this.dataset.y)" onmouseout="removeSelection(this.dataset.x, this.dataset.y)" onclick="activateCell(this.dataset.x, this.dataset.y)"></div>`;
         }
         //Create one Row
-        var currentRow = "\n        <div class=\"row\" draggable=\"false\">\n        " + cells + "\n        </div>";
-        field ? field.innerHTML += "\n        " + currentRow : null;
+        let currentRow = `
+        <div class="row" draggable="false">
+        ${cells}
+        </div>`;
+        field ? field.innerHTML += `
+        ${currentRow}` : null;
+    }
+    for (let yPos = 0; yPos < parseInt(rowSlider.value); yPos++) {
+        for (let xPos = 0; xPos < parseInt(columSlider.value); xPos++) {
+            cellTable.set(`${xPos + "_" + yPos}`, document.getElementById(xPos + "_" + yPos));
+        }
     }
 }
 //Bring Cells back to Live or kill them
 function activateCell(xPos, yPos, hover) {
-    var calcId = "x" + xPos + "/y" + yPos;
     //const clickedCell = document.getElementById(`x${xPos}/y${yPos}`);
     switch (brush) {
         case "one": {
@@ -93,8 +120,7 @@ function activateCell(xPos, yPos, hover) {
 //Render Selection
 function addSelection(xPos, yPos) {
     //Getting clicked Position
-    var calcId = "x" + xPos + "/y" + yPos;
-    var selectedCell = document.getElementById("x" + xPos + "/y" + yPos);
+    const selectedCell = document.getElementById(`${xPos + "_" + yPos}`);
     activateCell(xPos, yPos, true);
     //Draw if mouse is down
     if (mouseDown) {
@@ -103,38 +129,73 @@ function addSelection(xPos, yPos) {
 }
 //Remove Selection
 function removeSelection(xPos, yPos) {
-    var calcId = "x" + xPos + "/y" + yPos;
-    var selectedCell = document.getElementById("x" + xPos + "/y" + yPos);
+    const selectedCell = document.getElementById(`${xPos + "_" + yPos}`);
     activateCell(xPos, yPos, true);
 }
 //
 function defaulBrush(xPos, yPos, hover) {
     //Which cells do you want to change?
-    var cells = [
-        document.getElementById("x" + xPos + "/y" + yPos),
+    let cells = [
+        document.getElementById(`${xPos + "_" + yPos}`),
     ];
     //If Hovermode toggle hover effect
     if (hover) {
-        cells.forEach(function (cell) { return cell.classList.toggle("mouse-over"); });
+        cells.forEach(cell => cell.classList.toggle("mouse-over"));
     }
     else {
-        cells.forEach(function (cell) { return isPencil ? cell.classList.add("alive") : cell.classList.remove("alive"); });
+        cells.forEach(cell => isPencil ? cell.classList.add("alive") : cell.classList.remove("alive"));
     }
 }
 function brushOne(xPos, yPos, hover) {
     //Which cells do you want to change?
-    var cells = [
-        document.getElementById("x" + xPos + "/y" + yPos),
-        document.getElementById("x" + (parseInt(xPos)).toString() + "/y" + (parseInt(yPos) - 1).toString()),
-        document.getElementById("x" + (parseInt(xPos)).toString() + "/y" + (parseInt(yPos) + 1).toString()),
-        document.getElementById("x" + (parseInt(xPos) - 1).toString() + "/y" + (parseInt(yPos)).toString()),
-        document.getElementById("x" + (parseInt(xPos) + 1).toString() + "/y" + (parseInt(yPos)).toString()),
+    let cells = [
+        document.getElementById(`${xPos + "_" + yPos}`),
+        document.getElementById(`${(parseInt(xPos)).toString()}_${(parseInt(yPos) - 1).toString()}`),
+        document.getElementById(`${(parseInt(xPos)).toString()}_${(parseInt(yPos) + 1).toString()}`),
+        document.getElementById(`${(parseInt(xPos) - 1).toString()}_${(parseInt(yPos)).toString()}`),
+        document.getElementById(`${(parseInt(xPos) + 1).toString()}_${(parseInt(yPos)).toString()}`),
     ];
     //If Hovermode toggle hover effect
     if (hover) {
-        cells.forEach(function (cell) { return cell.classList.toggle("mouse-over"); });
+        cells.forEach(cell => cell.classList.toggle("mouse-over"));
     }
     else {
-        cells.forEach(function (cell) { return isPencil ? cell.classList.add("alive") : cell.classList.remove("alive"); });
+        cells.forEach(cell => isPencil ? cell.classList.add("alive") : cell.classList.remove("alive"));
+    }
+}
+//Abfrage der Nachbarn
+function scanForNeighbours() {
+    let neighbours;
+    cellTable.forEach(element => {
+        neighbours = 0;
+        //console.log(cellTable.get(`${(parseInt(element.dataset.x)+1).toString()}_${(parseInt(element.dataset.y)+1).toString()}`));
+        //console.log(`${(parseInt(element.dataset.x)+1).toString()}_${(parseInt(element.dataset.y)+1).toString()}`);
+        cellTable.get(`${(parseInt(element.dataset.x) - 1).toString()}_${(parseInt(element.dataset.y) - 1).toString()}`) && cellTable.get(`${(parseInt(element.dataset.x) - 1).toString()}_${(parseInt(element.dataset.y) - 1).toString()}`).classList.contains("alive") && neighbours++;
+        cellTable.get(`${(parseInt(element.dataset.x)).toString()}_${(parseInt(element.dataset.y) - 1).toString()}`) && cellTable.get(`${(parseInt(element.dataset.x)).toString()}_${(parseInt(element.dataset.y) - 1).toString()}`).classList.contains("alive") && neighbours++;
+        cellTable.get(`${(parseInt(element.dataset.x) + 1).toString()}_${(parseInt(element.dataset.y) - 1).toString()}`) && cellTable.get(`${(parseInt(element.dataset.x) + 1).toString()}_${(parseInt(element.dataset.y) - 1).toString()}`).classList.contains("alive") && neighbours++;
+        cellTable.get(`${(parseInt(element.dataset.x) - 1).toString()}_${(parseInt(element.dataset.y)).toString()}`) && cellTable.get(`${(parseInt(element.dataset.x) - 1).toString()}_${(parseInt(element.dataset.y)).toString()}`).classList.contains("alive") && neighbours++;
+        cellTable.get(`${(parseInt(element.dataset.x) + 1).toString()}_${(parseInt(element.dataset.y)).toString()}`) && cellTable.get(`${(parseInt(element.dataset.x) + 1).toString()}_${(parseInt(element.dataset.y)).toString()}`).classList.contains("alive") && neighbours++;
+        cellTable.get(`${(parseInt(element.dataset.x) - 1).toString()}_${(parseInt(element.dataset.y) + 1).toString()}`) && cellTable.get(`${(parseInt(element.dataset.x) - 1).toString()}_${(parseInt(element.dataset.y) + 1).toString()}`).classList.contains("alive") && neighbours++;
+        cellTable.get(`${(parseInt(element.dataset.x)).toString()}_${(parseInt(element.dataset.y) + 1).toString()}`) && cellTable.get(`${(parseInt(element.dataset.x)).toString()}_${(parseInt(element.dataset.y) + 1).toString()}`).classList.contains("alive") && neighbours++;
+        cellTable.get(`${(parseInt(element.dataset.x) + 1).toString()}_${(parseInt(element.dataset.y) + 1).toString()}`) && cellTable.get(`${(parseInt(element.dataset.x) + 1).toString()}_${(parseInt(element.dataset.y) + 1).toString()}`).classList.contains("alive") && neighbours++;
+        //console.log(neighbours.toString());
+        element.dataset.neighbours = neighbours.toString();
+    });
+    changeStates();
+}
+function changeStates() {
+    //console.log(parseInt(element.dataset.neighbours));
+    cellTable.forEach(element => {
+        ((!element.classList.contains("alive")) && parseInt(element.dataset.neighbours) === 3) && element.classList.add("alive");
+        ((element.classList.contains("alive")) && parseInt(element.dataset.neighbours) < 2) && element.classList.remove("alive");
+        //((element.classList.contains("alive")) && (parseInt(element.dataset.neighbours)===2));
+        //((element.classList.contains("alive")) && (parseInt(element.dataset.neighbours)===3));
+        ((element.classList.contains("alive")) && parseInt(element.dataset.neighbours) > 3) && element.classList.remove("alive");
+    });
+}
+function playSimulation() {
+    if (play) {
+        scanForNeighbours();
+        setTimeout(() => { playSimulation(); }, speed);
     }
 }

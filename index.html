@@ -31,7 +31,12 @@
             <input class="slider" type="range" min="5" max="50" id="rowSlider" value="25"/>
             <p id="rowValue"></p>
           </div>
-          <button id="start-button" onclick="playSimulation()">Start</button>
+          <div class="input-field">
+            <p class="input-title">Speed:</p>
+            <input class="slider" type="range" min="100" max="1000" id="speedSlider" value="500"/>
+            <p id="speedValue"></p>
+          </div>
+          <button id="start-button" onclick="startAndStop()">Start</button>
           <button id="draw-mode-button" onclick="toggleDrawMode()">Pencil</button>
         </div>
         <div id="gamefield" draggable="false" >
