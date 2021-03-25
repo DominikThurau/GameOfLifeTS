@@ -23,15 +23,15 @@
         <div class="config-bar">
           <div class="input-field">
             <p class="input-title">Spalten:</p>
-            <input class="slider" type="range" min="5" max="50" id="columSlider" value="10"/>
+            <input class="slider" type="range" min="5" max="50" id="columSlider" value="25"/>
             <p id="columValue"></p>
           </div>
           <div class="input-field">
             <p class="input-title">Reihen:</p>
-            <input class="slider" type="range" min="5" max="50" id="rowSlider" value="10"/>
+            <input class="slider" type="range" min="5" max="50" id="rowSlider" value="25"/>
             <p id="rowValue"></p>
           </div>
-          <button id="start-button">Start</button>
+          <button id="start-button" onclick="playSimulation()">Start</button>
           <button id="draw-mode-button" onclick="toggleDrawMode()">Pencil</button>
         </div>
         <div id="gamefield" draggable="false" >
