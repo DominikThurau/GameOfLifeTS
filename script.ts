@@ -130,20 +130,99 @@ function activateCell(xPos:string, yPos:string, hover?:boolean){
     switch(brush) { 
         case "one": { 
            //statements; 
-           !hover?brushOne(xPos, yPos):brushOne(xPos, yPos, true);
+           !hover?brushSelector([{x: 0,y: 0}],xPos, yPos):brushSelector([{x: 0,y: 0}], xPos, yPos, true);
            break; 
         } 
+        case "pentadecathlon": { 
+            //statements; 
+            //Brush
+            let pentadecathlonBrush = [
+                {x: 0,y: 0},{x: 0,y: -1},{x: 0,y: -2},{x: 0,y: -4},{x: 0,y: -5},{x: 0,y: 1},{x: 0,y: 3},{x: 0,y: 4},{x: -1,y: -3},{x: 1,y: -3},{x: -1,y: 2},{x: 1,y: 2},
+            
+            ];
+            !hover?brushSelector(pentadecathlonBrush,xPos, yPos):brushSelector(pentadecathlonBrush, xPos, yPos, true);
+            break; 
+         } 
         case "two": { 
            //statements; 
            break; 
         } 
         case "pulsarBrush": {
-                       //statements; 
-           !hover?pulsarBrush(xPos, yPos):pulsarBrush(xPos, yPos, true);
+            //pulsar brush; 
+            let pulsarBrush = [
+                {x:-3, y:-7},
+                {x:-3, y:-6},
+                {x:-3, y:-5},
+                {x:-2, y:-5},
+                {x:-2, y:-3},
+                {x:-1, y:-3},
+                {x:-1, y:-2},
+        
+                {x:-7, y:-3},
+                {x:-6, y:-3},
+                {x:-5, y:-3},
+                {x:-5, y:-2},
+                {x:-3, y:-2},
+                {x:-3, y:-1},
+                {x:-2, y:-1},
+        
+                {x:3, y:-7},
+                {x:3, y:-6},
+                {x:3, y:-5},
+                {x:2, y:-5},
+                {x:2, y:-3},
+                {x:1, y:-3},
+                {x:1, y:-2},
+        
+                {x:7, y:-3},
+                {x:6, y:-3},
+                {x:5, y:-3},
+                {x:5, y:-2},
+                {x:3, y:-2},
+                {x:3, y:-1},
+                {x:2, y:-1},
+        
+                {x:3, y:7},
+                {x:3, y:6},
+                {x:3, y:5},
+                {x:2, y:5},
+                {x:2, y:3},
+                {x:1, y:3},
+                {x:1, y:2},
+        
+                {x:7, y:3},
+                {x:6, y:3},
+                {x:5, y:3},
+                {x:5, y:2},
+                {x:3, y:2},
+                {x:3, y:1},
+                {x:2, y:1},
+        
+                {x:-3, y:7},
+                {x:-3, y:6},
+                {x:-3, y:5},
+                {x:-2, y:5},
+                {x:-2, y:3},
+                {x:-1, y:3},
+                {x:-1, y:2},
+        
+                {x:-7, y:3},
+                {x:-6, y:3},
+                {x:-5, y:3},
+                {x:-5, y:2},
+                {x:-3, y:2},
+                {x:-3, y:1},
+                {x:-2, y:1},
+            ];
+           !hover?brushSelector(
+            pulsarBrush,
+            xPos, yPos):brushSelector(
+                pulsarBrush,
+                xPos, yPos, true);
            break; 
         }
         default: { 
-            !hover?defaulBrush(xPos, yPos):defaulBrush(xPos, yPos, true);
+            !hover?brushSelector([{x: 0,y: 0}],xPos, yPos):brushSelector([{x: 0,y: 0}],xPos, yPos, true);
            break; 
         } 
      } 
@@ -152,7 +231,6 @@ function activateCell(xPos:string, yPos:string, hover?:boolean){
 //Render Selection
 function addSelection(xPos:string, yPos:string){
     //Getting clicked Position
-    const selectedCell = document.getElementById(`${xPos +"_" + yPos}`);
     activateCell(xPos, yPos, true);
 
     //Draw if mouse is down
@@ -162,116 +240,16 @@ function addSelection(xPos:string, yPos:string){
 }
 //Remove Selection
 function removeSelection(xPos:string, yPos:string){
-    const selectedCell = document.getElementById(`${xPos +"_" + yPos}`);
     activateCell(xPos, yPos, true);
 }
 
-//
-function defaulBrush(xPos:string, yPos:string, hover?:boolean){
-    //Which cells do you want to change?
-    let cells: HTMLElement[] = [
-        document.getElementById(`${xPos +"_" + yPos}`) as HTMLElement,
-    ];
-
+function brushSelector(brush: Array<{x:number, y:number}>, xPos:string, yPos:string, hover?:boolean){
     //If Hovermode toggle hover effect
     if(hover){
-        cells.forEach(cell => cell.classList.toggle("mouse-over"));
+        brush.forEach(cell => document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)?
+        document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)?.classList.toggle("mouse-over"):null);
     } else{
-        cells.forEach(cell => isPencil?cell.classList.add("alive"):cell.classList.remove("alive"))
-    }
-}
-
-function brushOne(xPos:string, yPos:string, hover?:boolean){
-    //Which cells do you want to change?
-    let cells: HTMLElement[] = [
-        document.getElementById(`${xPos +"_" + yPos}`) as HTMLElement,
-        document.getElementById(`${(parseInt(xPos)).toString()}_${(parseInt(yPos) -1).toString()}`) as HTMLElement,
-        document.getElementById(`${(parseInt(xPos)).toString()}_${(parseInt(yPos)  + 1).toString()}`) as HTMLElement,
-        document.getElementById(`${(parseInt(xPos) - 1).toString()}_${(parseInt(yPos)).toString()}`) as HTMLElement,
-        document.getElementById(`${(parseInt(xPos) + 1).toString()}_${(parseInt(yPos)).toString()}`) as HTMLElement,
-    ];
-
-    //If Hovermode toggle hover effect
-    if(hover){
-        cells.forEach(cell => cell.classList.toggle("mouse-over"));
-    } else{
-        cells.forEach(cell => isPencil?cell.classList.add("alive"):cell.classList.remove("alive"))
-    }
-}
-
-function pulsarBrush(xPos:string, yPos:string, hover?:boolean){
-    //Which cells do you want to change?
-    let cells = [
-        {x:-3, y:-7},
-        {x:-3, y:-6},
-        {x:-3, y:-5},
-        {x:-2, y:-5},
-        {x:-2, y:-3},
-        {x:-1, y:-3},
-        {x:-1, y:-2},
-
-        {x:-7, y:-3},
-        {x:-6, y:-3},
-        {x:-5, y:-3},
-        {x:-5, y:-2},
-        {x:-3, y:-2},
-        {x:-3, y:-1},
-        {x:-2, y:-1},
-
-        {x:3, y:-7},
-        {x:3, y:-6},
-        {x:3, y:-5},
-        {x:2, y:-5},
-        {x:2, y:-3},
-        {x:1, y:-3},
-        {x:1, y:-2},
-
-        {x:7, y:-3},
-        {x:6, y:-3},
-        {x:5, y:-3},
-        {x:5, y:-2},
-        {x:3, y:-2},
-        {x:3, y:-1},
-        {x:2, y:-1},
-
-        {x:3, y:7},
-        {x:3, y:6},
-        {x:3, y:5},
-        {x:2, y:5},
-        {x:2, y:3},
-        {x:1, y:3},
-        {x:1, y:2},
-
-        {x:7, y:3},
-        {x:6, y:3},
-        {x:5, y:3},
-        {x:5, y:2},
-        {x:3, y:2},
-        {x:3, y:1},
-        {x:2, y:1},
-
-        {x:-3, y:7},
-        {x:-3, y:6},
-        {x:-3, y:5},
-        {x:-2, y:5},
-        {x:-2, y:3},
-        {x:-1, y:3},
-        {x:-1, y:2},
-
-        {x:-7, y:3},
-        {x:-6, y:3},
-        {x:-5, y:3},
-        {x:-5, y:2},
-        {x:-3, y:2},
-        {x:-3, y:1},
-        {x:-2, y:1},
-    ];
-
-    //If Hovermode toggle hover effect
-    if(hover){
-        cells.forEach(cell => document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)?document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)?.classList.toggle("mouse-over"):null);
-    } else{
-        cells.forEach(cell => isPencil?document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)?.classList.add("alive"):document.getElementById(`${cell.x + "_" + cell.y}`)?.classList.remove("alive"))
+        brush.forEach(cell => isPencil?document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)?.classList.add("alive"):document.getElementById(`${cell.x + "_" + cell.y}`)?.classList.remove("alive"))
     }
 }
 
@@ -299,11 +277,21 @@ function scanForNeighbours(){
 function changeStates(){
     //console.log(parseInt(element.dataset.neighbours));
     cellTable.forEach(element=> {
-       ((!element.classList.contains("alive")) && parseInt(element.dataset.neighbours)===3)&&   element.classList.add("alive");
-       ((element.classList.contains("alive")) && parseInt(element.dataset.neighbours)<2)&&   element.classList.remove("alive");
+       if((!element.classList.contains("alive")) && (parseInt(element.dataset.neighbours)===3)){
+        element.classList.add("alive");
+        element.classList.remove("died");
+       }
+       if((element.classList.contains("alive")) && (parseInt(element.dataset.neighbours)<2)){
+        element.classList.remove("alive");
+        element.classList.add("died");
+       }
+       if((element.classList.contains("alive")) && (parseInt(element.dataset.neighbours)>3)){
+        element.classList.remove("alive");
+        element.classList.add("died");
+       }
+
        //((element.classList.contains("alive")) && (parseInt(element.dataset.neighbours)===2));
        //((element.classList.contains("alive")) && (parseInt(element.dataset.neighbours)===3));
-       ((element.classList.contains("alive")) && parseInt(element.dataset.neighbours)>3)&&   element.classList.remove("alive");
     });
 }
 function playSimulation(){

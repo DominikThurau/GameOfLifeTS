@@ -46,13 +46,17 @@ input[type="range"] {
   }
 
   .dead{
-      background-color: #f8edeb;
+      background-color: #F9F9F9;
   }
 
   .alive{
-      background-color: #fec89a;
+      background-color: #ea698b;
   }
 
   .mouse-over{
     background-color: #ffb5a7;
+  }
+
+  .died{
+    background-color: #F5E0E4;
   }
