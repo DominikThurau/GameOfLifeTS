@@ -9,7 +9,7 @@
 //Defining Variables
 let mouseDown: boolean = false;
 let isPencil: boolean = true;
-let brush: string = "deafult";
+let brush: string = "pixelbrush";
 let play: boolean = false;
 let speed: number;
 
@@ -21,6 +21,7 @@ const field = document.getElementById("gamefield");
 //Getting Tags
 const startButton = document.getElementById("start-button");//Getting Buttons
 const drawModeButton = document.getElementById("draw-mode-button"); //Getting Pencil Button
+const clearButton = document.getElementById("clear-button"); //Getting Pencil Button
 
 //Getting Slider and View of Colum
 const columSlider = document.getElementById("columSlider") as HTMLInputElement;
@@ -58,6 +59,11 @@ function toggleDrawMode(){
 //Toggling between start and pause
 function startAndStop(){
     play=!play;
+    if(!play){
+        startButton?startButton.innerHTML = "Play":null;
+    } else {
+        startButton?startButton.innerHTML = "Pause":null;
+    }
     if(play){
         playSimulation();
 }
@@ -128,9 +134,12 @@ function generateField(){
 function activateCell(xPos:string, yPos:string, hover?:boolean){
     //const clickedCell = document.getElementById(`x${xPos}/y${yPos}`);
     switch(brush) { 
-        case "one": { 
+        case "pixelbrush": { 
+            let pixelBrush = [
+                {x: 0,y: 0}
+            ];
            //statements; 
-           !hover?brushSelector([{x: 0,y: 0}],xPos, yPos):brushSelector([{x: 0,y: 0}], xPos, yPos, true);
+           !hover?brushSelector(pixelBrush,xPos, yPos):brushSelector(pixelBrush, xPos, yPos, true);
            break; 
         } 
         case "pentadecathlon": { 
@@ -295,11 +304,19 @@ function changeStates(){
        //((element.classList.contains("alive")) && (parseInt(element.dataset.neighbours)===3));
     });
 }
+
 function playSimulation(){
     if(play){
         scanForNeighbours();
         setTimeout(() => {  playSimulation(); }, speed);
     }
-    
-    
+}
+
+function clearCanvas(){
+    cellTable.forEach(function(cell){cell.classList.remove("died");cell.classList.remove("alive")})
+    play = false;
+}
+
+function switchBrush(pBrush:string){
+    brush = pBrush;
 }

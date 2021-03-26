@@ -14,7 +14,7 @@
     />
     <link rel="stylesheet" href="style.css" />
     <script defer src="build/script.js"></script>
-    <title>Document</title>
+    <title>DOM's Game-Of-Life</title>
   </head>
   <body>
       <div class="wrapper">
@@ -23,12 +23,12 @@
         <div class="config-bar">
           <div class="input-field">
             <p class="input-title">Spalten:</p>
-            <input class="slider" type="range" min="5" max="50" id="columSlider" value="25"/>
+            <input class="slider" type="range" min="5" max="60" id="columSlider" value="25"/>
             <p id="columValue"></p>
           </div>
           <div class="input-field">
             <p class="input-title">Reihen:</p>
-            <input class="slider" type="range" min="5" max="50" id="rowSlider" value="25"/>
+            <input class="slider" type="range" min="5" max="60" id="rowSlider" value="25"/>
             <p id="rowValue"></p>
           </div>
           <div class="input-field">
@@ -36,8 +36,16 @@
             <input class="slider" type="range" min="100" max="1000" id="speedSlider" value="500"/>
             <p id="speedValue"></p>
           </div>
-          <button id="start-button" onclick="startAndStop()">Start</button>
-          <button id="draw-mode-button" onclick="toggleDrawMode()">Pencil</button>
+          <div>
+            <button id="start-button" onclick="startAndStop()">Play</button>
+            <button id="draw-mode-button" onclick="toggleDrawMode()">Pencil</button>
+            <button id="clear-button" onclick="clearCanvas()">Clear</button>
+          </div>
+          <div>
+            <button id="pixel-brush--button" onclick="switchBrush('pixelbrush')">PixelBrush</button>
+            <button id="draw-mode-button" onclick="switchBrush('pulsarBrush')">PulsarBrush</button>
+            <button id="clear-button" onclick="switchBrush('pentadecathlon')">Pentadecathlon</button>
+          </div>
         </div>
         <div id="gamefield" draggable="false" >
 
