@@ -53,10 +53,10 @@ input[type="range"] {
       background-color: #ea698b;
   }
 
-  .mouse-over{
-    background-color: #ffb5a7;
-  }
-
   .died{
     background-color: #F5E0E4;
+  }
+
+  .mouse-over{
+    background-color: #ffb5a7;
   }

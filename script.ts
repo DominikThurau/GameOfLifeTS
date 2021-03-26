@@ -9,7 +9,7 @@
 //Defining Variables
 let mouseDown: boolean = false;
 let isPencil: boolean = true;
-let brush: string = "pulsarBrush";
+let brush: string = "deafult";
 let play: boolean = false;
 let speed: number;
 
@@ -246,7 +246,8 @@ function removeSelection(xPos:string, yPos:string){
 function brushSelector(brush: Array<{x:number, y:number}>, xPos:string, yPos:string, hover?:boolean){
     //If Hovermode toggle hover effect
     if(hover){
-        brush.forEach(cell => document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)?
+        brush.forEach(
+            cell => document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)?
         document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)?.classList.toggle("mouse-over"):null);
     } else{
         brush.forEach(cell => isPencil?document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)?.classList.add("alive"):document.getElementById(`${cell.x + "_" + cell.y}`)?.classList.remove("alive"))

@@ -9,7 +9,7 @@
 //Defining Variables
 let mouseDown = false;
 let isPencil = true;
-let brush = "pulsarBrush";
+let brush = "deafult";
 let play = false;
 let speed;
 let cellTable = new Map();
