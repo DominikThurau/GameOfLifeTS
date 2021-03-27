@@ -272,7 +272,7 @@ function playSimulation() {
 }
 function clearCanvas() {
     cellTable.forEach(function (cell) { cell.classList.remove("died"); cell.classList.remove("alive"); });
-    play = false;
+    startAndStop();
 }
 function switchBrush(pBrush) {
     brush = pBrush;

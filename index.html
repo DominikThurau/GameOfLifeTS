@@ -4,22 +4,30 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-    />
-    <link
-      rel="stylesheet"
-      href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css"
-    />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="style.css" />
     <script defer src="build/script.js"></script>
     <title>DOM's Game-Of-Life</title>
   </head>
   <body>
       <div class="wrapper">
-        <h1>Game of life</h1>
-        <p>Einleitung, Anleitung und Beschreibung</p>
+        <header>
+          <h1>Game of life</h1>
+          <p>Das Spiel des Lebens (englisch Conway’s Game of Life) ist ein vom Mathematiker John Horton Conway 1970 entworfenes Spiel, basierend auf einem zweidimensionalen zellulären Automaten. Es ist eine einfache und bis heute populäre Umsetzung der Automaten-Theorie von Stanisław Marcin Ulam. </p>
+          <h3>Erklärung</h2>
+          <p>
+            <h3>Schritt 1:</h3>
+            Wähle die Größe des Spielfeldes, sowie die Geschwindigkeit pro Generation.<br>
+            <h3>Schritt 2: </h3>
+            Fang an auf der Zeichenfläche herumzumalen, oder wähle einen der vorgefertigten Pinsel und probiere aus was passiert.<br>
+            <h3>Schritt 3:</h3>
+            Starte das Spiel und schau zu wie dein Volk sich entwickelt.<br><br>
+            <h3>Tipp: </h3>
+            Es ist auch während die Simulation läuft möglich neue Zellen zu deinem Volk hinzuzufügen.<br>
+            Mit dem Button "Clear" ist es möglich von vorne anzufangen.
+
+          </p>
+        </header>
         <div class="config-bar">
           <div class="input-field">
             <p class="input-title">Spalten:</p>
@@ -33,20 +41,25 @@
           </div>
           <div class="input-field">
             <p class="input-title">Speed:</p>
-            <input class="slider" type="range" min="100" max="1000" id="speedSlider" value="500"/>
+            <input class="slider" type="range" step="100" min="100" max="1000" id="speedSlider" value="500"/>
             <p id="speedValue"></p>
           </div>
+          <div class="button-bar">
+            <h2>Tools</h2>
           <div>
-            <button id="start-button" onclick="startAndStop()">Play</button>
+            <button id="start-button" onclick="startAndStop()">Play <span class="material-icons md-18">play_arrow</span></button>
             <button id="draw-mode-button" onclick="toggleDrawMode()">Pencil</button>
             <button id="clear-button" onclick="clearCanvas()">Clear</button>
           </div>
+          <h2>Brushes</h2>
           <div>
             <button id="pixel-brush--button" onclick="switchBrush('pixelbrush')">PixelBrush</button>
             <button id="draw-mode-button" onclick="switchBrush('pulsarBrush')">PulsarBrush</button>
             <button id="clear-button" onclick="switchBrush('pentadecathlon')">Pentadecathlon</button>
           </div>
+          </div>
         </div>
+        <h2 id="gamefield-title">Spielfeld</h2>
         <div id="gamefield" draggable="false" >
 
         </div>
