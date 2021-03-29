@@ -222,7 +222,7 @@ function brushSelector(brush, xPos, yPos, hover) {
         });
     }
     else {
-        brush.forEach(cell => { var _a, _b; return isPencil ? (_a = document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)) === null || _a === void 0 ? void 0 : _a.classList.add("alive") : (_b = document.getElementById(`${cell.x + "_" + cell.y}`)) === null || _b === void 0 ? void 0 : _b.classList.remove("alive"); });
+        brush.forEach(cell => { var _a, _b; return isPencil ? (_a = document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)) === null || _a === void 0 ? void 0 : _a.classList.add("alive") : ((_b = document.getElementById(`${(parseInt(xPos) + cell.x) + "_" + (parseInt(yPos) + cell.y)}`)) === null || _b === void 0 ? void 0 : _b.classList.remove("alive")); });
     }
 }
 //Abfrage der Nachbarn
