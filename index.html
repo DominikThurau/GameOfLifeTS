@@ -8,6 +8,54 @@
     <link rel="stylesheet" href="style.css" />
     <script defer src="build/script.js"></script>
     <title>DOM's Game-Of-Life</title>
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['line']});
+      google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'Generation');
+      data.addColumn('number', 'Population');
+
+      data.addRows([
+        [0, 10],
+        [2, 50],
+        [3, 50],
+        [4, 50],
+        [5, 50],
+        [6, 50],
+        [7, 50],
+      ]);
+
+      var options = {
+        chart: {
+          title: 'Box Office Earnings in First Two Weeks of Opening',
+          subtitle: 'in millions of dollars (USD)'
+        },
+        width: 450,
+        height: 250,
+        series: {
+          // Gives each series an axis name that matches the Y-axis below.
+          0: {axis: 'Population'},
+          1: {axis: 'Generations'}
+        },
+        axes: {
+          // Adds labels to each axis; they don't have to match the axis names.
+          y: {
+            Population: {label: 'Population'},
+          }
+        }
+      };
+
+      var chart = new google.charts.Line(document.getElementById('line_top_x'));
+
+      chart.draw(data, google.charts.Line.convertOptions(options));
+    }
+  </script>
+
   </head>
   <body>
       <div class="wrapper">
@@ -50,6 +98,7 @@
             <button id="start-button" onclick="startAndStop()">Play <span class="material-icons md-18">play_arrow</span></button>
             <button id="draw-mode-button" onclick="toggleDrawMode()">Pencil</button>
             <button id="clear-button" onclick="clearCanvas()">Clear</button>
+            <button id="clear-button" onclick="fillRandom()">Random</button>
           </div>
           <h2>Brushes</h2>
           <div>
@@ -63,7 +112,10 @@
         <div id="gamefield" draggable="false" >
 
         </div>
+        <div id="line_top_x"></div>
       </div>
+
+
     
   </body>
 </html>

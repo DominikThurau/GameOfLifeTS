@@ -57,17 +57,22 @@ function toggleDrawMode(){
 }
 
 //Toggling between start and pause
-function startAndStop(){
-    play=!play;
-    if(!play){
+function startAndStop(stop?: boolean){
+    if(stop){
+        play = false;
         startButton?startButton.innerHTML = "Play":null;
-    } else {
-        startButton?startButton.innerHTML = "Pause":null;
+        
+    } else{
+        play=!play;
+        if(!play){
+            startButton?startButton.innerHTML = "Play":null;
+        } else {
+            startButton?startButton.innerHTML = "Pause":null;
+        }
+        if(play){
+            playSimulation();
+        }
     }
-    if(play){
-        playSimulation();
-}
-    
 }
 
 //Render SliderValues
@@ -314,9 +319,24 @@ function playSimulation(){
 
 function clearCanvas(){
     cellTable.forEach(function(cell){cell.classList.remove("died");cell.classList.remove("alive")})
-    startAndStop();
+    startAndStop(true);
 }
 
 function switchBrush(pBrush:string){
     brush = pBrush;
 }
+
+function fillRandom(){
+    clearCanvas();
+        cellTable.forEach(
+            function(cell){
+                let randomNumber: number = getRandomInt(5);
+                if(randomNumber=== 1){
+                    cell.classList.add("alive");
+                }
+            });
+}
+
+function getRandomInt(max: number) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
