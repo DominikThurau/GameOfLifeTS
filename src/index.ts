@@ -1,10 +1,4 @@
-/*interface Cell {
-    id: string;
-    x: number;
-    y: number;
-    var objekte = ["sas", "sass", "ff"];
-    let a : Cell = {id: "1", x: 0, y: 0};
-}*/
+import { clearButton, columSlider, columValue, drawModeButton, field, pentaBrushButton, pixelBrushButton, pulsarBrushButton, randomButton, rowSlider, rowValue, speedSlider, speedValue, startButton } from "./getsAndVars";
 
 //Defining Variables
 let mouseDown: boolean = false;
@@ -14,26 +8,6 @@ let play: boolean = false;
 let speed: number;
 
 let cellTable = new Map();
-
-//Getting Gamefield
-const field = document.getElementById("gamefield");
-
-//Getting Tags
-const startButton = document.getElementById("start-button");//Getting Buttons
-const drawModeButton = document.getElementById("draw-mode-button"); //Getting Pencil Button
-const clearButton = document.getElementById("clear-button"); //Getting Pencil Button
-
-//Getting Slider and View of Colum
-const columSlider = document.getElementById("columSlider") as HTMLInputElement;
-const columValue = document.getElementById("columValue");
-
-//Getting Slider and View of Row
-const rowSlider = document.getElementById("rowSlider") as HTMLInputElement;
-const rowValue = document.getElementById("rowValue");
-
-//Getting Slider and View of Row
-const speedSlider = document.getElementById("speedSlider") as HTMLInputElement;
-const speedValue = document.getElementById("speedValue");
 
 //Toggling if mouse is down
 document.body.onmousedown = function() { 
@@ -93,10 +67,17 @@ function displaySpeedValue(){
 }
 
 
-//Add Eventlistener for  change of Inputvalues
+//Add Eventlistener
 columSlider.addEventListener("input", displayColumnValue);
 rowSlider.addEventListener("input", displayRowValue);
 speedSlider.addEventListener("input", displaySpeedValue);
+startButton?.addEventListener("click", function(){startAndStop()});
+drawModeButton?.addEventListener("click", function(){toggleDrawMode()});
+clearButton?.addEventListener("click", function(){clearCanvas()});
+randomButton?.addEventListener("click", function(){fillRandom()});
+pixelBrushButton?.addEventListener("click", function(){switchBrush('pixelbrush')});
+pulsarBrushButton?.addEventListener("click", function(){switchBrush('pulsarBrush')});
+pentaBrushButton?.addEventListener("click", function(){switchBrush('pentadecathlon')});
 
 //Init Game
 displayColumnValue();
@@ -110,21 +91,26 @@ function generateField(){
     field?field.innerHTML = "":null;
 
     for(let yPos = 0; yPos < parseInt(rowSlider.value); yPos++ ){
-        //Cell "List"
-        let cells:string = "";
+        //Create one Row
+        let currentRow = document.createElement("div");
+        currentRow.classList.add("row");
 
         for(let xPos = 0;xPos< parseInt(columSlider.value); xPos++){
-            
-            cells += `<div class="cell dead" draggable="false" id="${xPos +"_" + yPos}" data-x="${xPos}" data-y="${yPos}" data-neighbours="0" onmouseover="addSelection(this.dataset.x, this.dataset.y)" onmouseout="removeSelection(this.dataset.x, this.dataset.y)" onclick="activateCell(this.dataset.x, this.dataset.y)"></div>`;
+            let newCell = document.createElement("div");
+            newCell.id = xPos +"_" + yPos;
+            newCell.classList.add("cell");
+            newCell.classList.add("dead");
+            newCell.setAttribute("data-x", xPos.toString());
+            newCell.setAttribute("data-y", yPos.toString());
+            newCell.setAttribute("data-neighbours", "0");
+            newCell.addEventListener("mouseover", function(){addSelection(this.dataset.x?.toString() as string, this.dataset.y?.toString() as string)});
+            newCell.addEventListener("mouseout", function(){removeSelection(this.dataset.x?.toString() as string, this.dataset.y?.toString() as string)});
+            newCell.addEventListener("click", function(){activateCell(this.dataset.x?.toString() as string, this.dataset.y?.toString() as string)});
+            currentRow.appendChild(newCell); //`<div class="cell dead" draggable="false" id="${xPos +"_" + yPos}" data-x="${xPos}" data-y="${yPos}" data-neighbours="0" onmouseover="addSelection(this.dataset.x, this.dataset.y)" onmouseout="removeSelection(this.dataset.x, this.dataset.y)" onclick="activateCell(this.dataset.x, this.dataset.y)"></div>`;
         }
 
-        //Create one Row
-        let currentRow = `
-        <div class="row" draggable="false">
-        ${cells}
-        </div>`;
-        field?field.innerHTML += `
-        ${currentRow}`:null;
+
+        field?field.appendChild(currentRow):null;
     }
 
     for(let yPos = 0; yPos < parseInt(rowSlider.value); yPos++ ){

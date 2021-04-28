@@ -1,3 +1,4 @@
+<!--My Code-->
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -8,56 +9,11 @@
     <link rel="stylesheet" href="style.css" />
     <script defer src="build/script.js"></script>
     <title>DOM's Game-Of-Life</title>
-
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load('current', {'packages':['line']});
-      google.charts.setOnLoadCallback(drawChart);
-
-    function drawChart() {
-
-      var data = new google.visualization.DataTable();
-      data.addColumn('number', 'Generation');
-      data.addColumn('number', 'Population');
-
-      data.addRows([
-        [0, 10],
-        [2, 50],
-        [3, 50],
-        [4, 50],
-        [5, 50],
-        [6, 50],
-        [7, 50],
-      ]);
-
-      var options = {
-        chart: {
-          title: 'Box Office Earnings in First Two Weeks of Opening',
-          subtitle: 'in millions of dollars (USD)'
-        },
-        width: 450,
-        height: 250,
-        series: {
-          // Gives each series an axis name that matches the Y-axis below.
-          0: {axis: 'Population'},
-          1: {axis: 'Generations'}
-        },
-        axes: {
-          // Adds labels to each axis; they don't have to match the axis names.
-          y: {
-            Population: {label: 'Population'},
-          }
-        }
-      };
-
-      var chart = new google.charts.Line(document.getElementById('line_top_x'));
-
-      chart.draw(data, google.charts.Line.convertOptions(options));
-    }
   </script>
 
   </head>
   <body>
+    <script defer  type="module" src="./build/bundle.js"></script>
       <div class="wrapper">
         <header>
           <h1>Game of life</h1>
@@ -79,12 +35,12 @@
         <div class="config-bar">
           <div class="input-field">
             <p class="input-title">Spalten:</p>
-            <input class="slider" type="range" min="5" max="60" id="columSlider" value="25"/>
+            <input class="slider" type="range" min="5" max="100" id="columSlider" value="25"/>
             <p id="columValue"></p>
           </div>
           <div class="input-field">
             <p class="input-title">Reihen:</p>
-            <input class="slider" type="range" min="5" max="60" id="rowSlider" value="25"/>
+            <input class="slider" type="range" min="5" max="100" id="rowSlider" value="25"/>
             <p id="rowValue"></p>
           </div>
           <div class="input-field">
@@ -95,16 +51,16 @@
           <div class="button-bar">
             <h2>Tools</h2>
           <div>
-            <button id="start-button" onclick="startAndStop()">Play <span class="material-icons md-18">play_arrow</span></button>
-            <button id="draw-mode-button" onclick="toggleDrawMode()">Pencil</button>
-            <button id="clear-button" onclick="clearCanvas()">Clear</button>
-            <button id="clear-button" onclick="fillRandom()">Random</button>
+            <button id="start-button">Play <span class="material-icons md-18">play_arrow</span></button>
+            <button id="draw-mode-button">Pencil</button>
+            <button id="clear-button">Clear</button>
+            <button id="random-button">Random</button>
           </div>
           <h2>Brushes</h2>
           <div>
-            <button id="pixel-brush--button" onclick="switchBrush('pixelbrush')">PixelBrush</button>
-            <button id="draw-mode-button" onclick="switchBrush('pulsarBrush')">PulsarBrush</button>
-            <button id="clear-button" onclick="switchBrush('pentadecathlon')">Pentadecathlon</button>
+            <button id="pixel-brush-button">PixelBrush</button>
+            <button id="pulsar-brush-button">PulsarBrush</button>
+            <button id="penta-brush-button">Pentadecathlon</button>
           </div>
           </div>
         </div>
@@ -112,10 +68,6 @@
         <div id="gamefield" draggable="false" >
 
         </div>
-        <div id="line_top_x"></div>
       </div>
-
-
-    
   </body>
 </html>
