@@ -1,22 +1,18 @@
 {
-  "name": "gameoflifets",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/DominikThurau/GameOfLifeTS.git"
-  },
-  "author": "Dominik Thurau",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/DominikThurau/GameOfLifeTS/issues"
-  },
-  "homepage": "https://github.com/DominikThurau/GameOfLifeTS#readme",
-  "dependencies": {
-    "@material-ui/core": "^4.11.3"
-  }
+    "name": "typescript-assignment",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build": "rollup -c",
+        "watch": "rollup -cw"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "rollup": "^2.41.0",
+        "rollup-plugin-typescript2": "^0.26.0",
+        "tslib": "^2.1.0",
+        "typescript": "^3.9.9"
+    }
 }
