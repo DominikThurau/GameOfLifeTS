@@ -59,8 +59,6 @@ function loadData() {
   generateField();
 }
 
-
-
 //Changing between Pencil and Eraser
 export function toggleDrawMode() {
   isPencil = !isPencil;
@@ -193,4 +191,3 @@ export function fillRandom() {
 function getRandomInt(max: number) {
   return Math.floor(Math.random() * Math.floor(max));
 }
-
